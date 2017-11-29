@@ -6,7 +6,7 @@ from ..models import Article, ArticleType, article_types, Comment, \
     Follow, User, Source, BlogView
 from .forms import CommentForm
 from .. import db
-
+import markdown2
 
 @main.route('/')
 def index():
@@ -84,6 +84,11 @@ def articleDetails(id):
         error_out=False)
     comments = pagination.items
     article.add_view(article, db)
+    article.content = markdown2.markdown(article.content)
+
+    print "************************"
+    print article.content
+    print "************************"
     return render_template('article_detials.html', User=User, article=article,
                            comments=comments, pagination=pagination, page=page,
                            form=form, endpoint='.articleDetails', id=article.id)
